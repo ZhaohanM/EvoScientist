@@ -602,7 +602,13 @@ def _resolve_backend(cfg: LauncherConfig, config: Any) -> _BackendDecision:
             "workspace_mismatch",
             f"Port {cfg.backend_port} is already serving a langgraph dev "
             f"for a run folder of this workspace ({sidecar['run_dir']}).",
-            "Stop that EvoSci --mode=run session, then launch again.",
+            "Stop that EvoSci --mode=run session, then launch again."
+            + (
+                " If that session already ended, stop its kept-alive server "
+                "with 'EvoSci server stop'."
+                if cfg.keepalive
+                else ""
+            ),
         )
     if sidecar.get("deploy_mode") is False:
         raise LauncherError(
